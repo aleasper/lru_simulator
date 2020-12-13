@@ -1,10 +1,14 @@
 <template>
   <div class="home home-div">
     <div class="lru-viewer-div">
-
+      <LRUVisualizer
+          ref="LRUVisualizer"
+          v-bind:pages-list="arrayPages"
+          v-bind:queue-size="queueSize"
+          v-bind:delay="delay"
+      ></LRUVisualizer>
     </div>
     <div class="vertical-divider">
-
     </div>
     <div class="lru-settings-div">
       <h1>Исходные данные</h1>
@@ -43,16 +47,21 @@
             v-model="delay"
         ></v-slider>
       </div>
+      <div>
+        <v-btn v-on:click="start">Старт</v-btn>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import LRUVisualizer from "@/components/LRUVisualizer";
 
 export default {
   name: 'Home',
   components: {
+    LRUVisualizer
   },
   data:  () => ({
     queueSize: '',
@@ -70,6 +79,9 @@ export default {
         }
       }
       return true;
+    },
+    start: function (){
+      this.$refs.LRUVisualizer.start();
     }
   },
   watch: {
