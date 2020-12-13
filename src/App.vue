@@ -1,56 +1,34 @@
 <template>
   <v-app>
     <v-app-bar
-      app
-      color="primary"
-      dark
+        app
+        color="primary"
+        dark
     >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+      <div class="app-bar-title">
+        <h1>LRU</h1>
       </div>
-
+      <div id="nav">
+        <router-link to="/" class="app-bar-link">К приложению</router-link> |
+        <router-link to="/about" class="app-bar-link">О программе</router-link> |
+        <router-link to="/theory" class="app-bar-link">Теория</router-link>
+      </div>
       <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
     </v-app-bar>
-
     <v-main>
-      <HelloWorld/>
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
+
   },
 
   data: () => ({
@@ -58,3 +36,15 @@ export default {
   }),
 };
 </script>
+
+<style scoped>
+#nav{
+  color: white;
+}
+.app-bar-link{
+  color: white;
+}
+.app-bar-title{
+  margin: 0 40px 0 0;
+}
+</style>
