@@ -4,8 +4,8 @@
       <LRUVisualizer
           ref="LRUVisualizer"
           v-bind:pages-list="arrayPages"
-          v-bind:queue-size="queueSize"
-          v-bind:delay="delay"
+          v-bind:queue-size="parseInt(queueSize)"
+          v-bind:delay="parseInt(delay)"
       ></LRUVisualizer>
     </div>
     <div class="vertical-divider">
@@ -13,11 +13,12 @@
     <div class="lru-settings-div">
       <h1>Исходные данные</h1>
       <div class="queue-size-input">
-        <v-text-field
+        <v-select
+            :items="queueSizeList"
             label="Размер очереди"
-            v-model="queueSize"
             outlined
-        ></v-text-field>
+            v-model="queueSize"
+        ></v-select>
       </div>
       <div>
         <v-text-field
@@ -41,14 +42,20 @@
       <div>
         <v-slider
             label="Задержка между командами в мс"
-            max="1000"
-            min="10"
+            max="2000"
+            min="100"
             thumb-label
             v-model="delay"
         ></v-slider>
       </div>
-      <div>
-        <v-btn v-on:click="start">Старт</v-btn>
+      <div class="actions-div">
+        <v-btn class="action-btn" v-on:click="autoStart">Автоматический старт</v-btn>
+        <div class="manual-actions-div">
+          <v-btn class="action-btn" v-on:click="loadData">Загрузить данные</v-btn>
+          <v-btn class="action-btn" v-on:click="step">Сделать один шаг</v-btn>
+          <v-btn class="action-btn" v-on:click="reStart">Сбросить</v-btn>
+        </div>
+
       </div>
     </div>
   </div>
@@ -64,15 +71,18 @@ export default {
     LRUVisualizer
   },
   data:  () => ({
-    queueSize: '',
-    pages: '',
+    queueSize: 5,
+    pages: 'A, B, C, A, D, E, A, C, D, C',
     arrayPages: [],
-    delay: 10,
+    delay: 100,
+    queueSizeList: [2, 3, 4, 5, 6, 7, 8],
   }),
   methods: {
     pagesRule: function (){
       this.arrayPages = [];
-      let t  = this.pages.split(',');
+      let temp = this.pages.replaceAll(' ', '');
+      let t  = temp.split(',');
+
       for (let i in t){
         if (t[i] !== '' && t[i] !== ' '){
           this.arrayPages.push(t[i]);
@@ -80,8 +90,25 @@ export default {
       }
       return true;
     },
-    start: function (){
-      this.$refs.LRUVisualizer.start();
+    autoStart: function (){
+      if (this.pages.replaceAll(' ', '') !== ''){
+        this.$refs.LRUVisualizer.start();
+      }
+    },
+    step: function (){
+      if (this.pages.replaceAll(' ', '') !== ''){
+        this.$refs.LRUVisualizer.add();
+      }
+    },
+    loadData: function (){
+      if (this.pages.replaceAll(' ', '') !== ''){
+        this.$refs.LRUVisualizer.reInit();
+      }
+    },
+    reStart: function (){
+      if (this.pages.replaceAll(' ', '') !== ''){
+        this.$refs.LRUVisualizer.reInit();
+      }
     }
   },
   watch: {
@@ -89,6 +116,18 @@ export default {
 }
 </script>
 <style scoped>
+.action-btn{
+  margin: 2px;
+}
+.manual-actions-div{
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+.actions-div{
+  display: flex;
+  flex-direction: column;
+}
 .home-div{
   width: 100%;
   height: 100%;
