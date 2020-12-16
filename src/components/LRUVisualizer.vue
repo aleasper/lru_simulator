@@ -72,15 +72,10 @@ export default {
           this.buffer[0] = el;
         }
       } else {
-        let emptyEls = this.buffer.filter(x => x===' ').length;
-        if (emptyEls !== 0){
-          this.buffer[this.queueSize - (emptyEls)] = el;
-        } else {
-          for (let i = this.buffer.length - 1; i !== 0; --i) {
-            this.buffer[i] = this.buffer[i-1];
-          }
-          this.buffer[0] = el;
+        for (let i = this.buffer.length - 1; i !== 0; --i) {
+          this.buffer[i] = this.buffer[i-1];
         }
+        this.buffer[0] = el;
       }
     },
     add: function (){
