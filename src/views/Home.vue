@@ -6,6 +6,7 @@
           v-bind:pages-list="arrayPages"
           v-bind:queue-size="parseInt(queueSize)"
           v-bind:delay="parseInt(delay)"
+          v-bind:description="description"
       ></LRUVisualizer>
     </div>
     <div class="vertical-divider">
@@ -48,6 +49,12 @@
             v-model="delay"
         ></v-slider>
       </div>
+      <div>
+        <v-checkbox
+            v-model="description"
+            label="Текстовое описание шагов"
+        ></v-checkbox>
+      </div>
       <div class="actions-div">
         <v-btn class="action-btn" v-on:click="autoStart">Автоматический старт</v-btn>
         <div class="manual-actions-div">
@@ -72,10 +79,11 @@ export default {
   },
   data:  () => ({
     queueSize: 5,
-    pages: 'A, B, C, A, D, E, A, C, D, C',
+    pages: 'A, F, C, B, D, E, A, C, A, C',
     arrayPages: [],
     delay: 100,
     queueSizeList: [2, 3, 4, 5, 6, 7, 8],
+    description: false,
   }),
   methods: {
     pagesRule: function (){
