@@ -28,6 +28,22 @@
             :rules="[pagesRule]"
             outlined
         ></v-text-field>
+        <div class="upload-div">
+          <v-btn
+              color="blue-grey"
+              class="white--text"
+              v-on:click="openFile"
+          >
+            Загрузить из файла
+            <v-icon
+                right
+                dark
+            >
+              mdi-cloud-upload
+            </v-icon>
+          </v-btn>
+          <input id="file-input" type="file" style="display: none" accept=".txt"/>
+        </div>
         <div
             v-if="arrayPages.length > 0"
             class="pages-viewer-div"
@@ -40,6 +56,7 @@
           >{{page}}</div>
         </div>
       </div>
+
       <div>
         <v-slider
             label="Задержка между командами в мс"
@@ -55,6 +72,7 @@
             label="Текстовое описание шагов"
         ></v-checkbox>
       </div>
+
       <div class="actions-div">
         <v-btn class="action-btn" v-on:click="autoStart">Автоматический старт</v-btn>
         <div class="manual-actions-div">
@@ -117,6 +135,21 @@ export default {
       if (this.pages.replaceAll(' ', '') !== ''){
         this.$refs.LRUVisualizer.reInit();
       }
+    },
+    openFile(){
+      let self = this;
+      document.getElementById('file-input').click();
+      document.getElementById('file-input').addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.addEventListener('load', (event) => {
+          let base64 = event.target.result.split(',')[1];
+          let buff = new Buffer(base64, 'base64');
+          let text = buff.toString();
+          self.pages = text;
+        });
+        reader.readAsDataURL(file);
+      });
     }
   },
   watch: {
@@ -124,6 +157,9 @@ export default {
 }
 </script>
 <style scoped>
+.upload-div{
+  margin: 4px 0 8px 0;
+}
 .action-btn{
   margin: 2px;
 }

@@ -32,6 +32,9 @@
         <div class="page-list-arrow"></div>
       </div>
     </div>
+    <div class="fault-counter-div">
+      Количество прерываний (вставок в буфер новых страниц): {{breaks}}
+    </div>
     <div v-if="description" class="description-container">
       <div style="font-size: 18px; margin: 4px 0">
         Текстовое описание шагов
@@ -56,7 +59,7 @@ export default {
     buffer: [],
     pagesListCopy: [],
     descriptionText: [],
-
+    breaks: 0,
   }),
   methods: {
     start: async function (){
@@ -94,6 +97,7 @@ export default {
           this.buffer[0] = el;
         }
       } else {
+        this.breaks = this.breaks + 1;
         this.descriptionText.push(`Сдвигаем вправо все страницы и добавляем "${el}" в начало буфера`)
         for (let i = this.buffer.length - 1; i !== 0; --i) {
           this.buffer[i] = this.buffer[i-1];
@@ -111,6 +115,7 @@ export default {
     },
     reInit: function (){
       console.log('reinit');
+      this.breaks = 0;
       this.descriptionText = [];
       this.buffer = [];
       for (let i = 0; i !== this.queueSize; ++i){
@@ -126,10 +131,13 @@ export default {
 </script>
 
 <style scoped>
+.fault-counter-div{
+  padding: 10px;
+}
 .description-container{
   padding: 4px 12px;
   font-size: 12px;
-  max-height: 400px;
+  max-height: 300px;
   overflow-y: auto;
   margin-top: 30px;
 }
